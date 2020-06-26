@@ -13,24 +13,16 @@ import org.springframework.stereotype.Component;
 public class AppListeners {
 
   private final KafkaTemplate<String, String> kafkaTemplate;
-  private final MainRepository mainRepository;
 
   @EventListener(ApplicationReadyEvent.class)
   public void handle() {
-    genarateAndAddEntityToDB();
-    produceMessage();
+//    produceMessage();
   }
 
   private void produceMessage() {
-    var message = "AAA";
-    log.info(String.format("#### -> Producing message -> %s", message));
-    this.kafkaTemplate.send("users", message);
-  }
-
-  private void genarateAndAddEntityToDB() {
-    var e = new MainEntity();
-    e.setData("DATA");
-    mainRepository.save(e);
+//    var message = "AAA";
+//    log.info(String.format("#### -> Producing message -> %s", message));
+//    this.kafkaTemplate.send("users", message);
   }
 
 }
