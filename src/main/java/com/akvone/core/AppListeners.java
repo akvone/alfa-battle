@@ -13,9 +13,11 @@ import org.springframework.stereotype.Component;
 public class AppListeners {
 
   private final KafkaTemplate<String, String> kafkaTemplate;
+  private final MainRepository mainRepository;
 
   @EventListener(ApplicationReadyEvent.class)
   public void handle() {
+    genarateAndAddEntityToDB();
     produceMessage();
   }
 
@@ -25,5 +27,10 @@ public class AppListeners {
     this.kafkaTemplate.send("users", message);
   }
 
+  private void genarateAndAddEntityToDB() {
+    var e = new MainEntity();
+    e.setData("DATA");
+    mainRepository.save(e);
+  }
 
 }
