@@ -2,11 +2,14 @@ logging:
   level:
     root: INFO
 
+server:
+  port: 8082
+
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/test
-    username: postgres
-    password: postgres
+    url: jdbc:postgresql://localhost:5432/alfa_battle
+    username: alfa_battle
+    password: qwe123
     hikari:
       minimum-idle: 10
 #  jpa:
