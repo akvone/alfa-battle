@@ -1,5 +1,6 @@
-package com.akvone.core;
+package com.akvone.core.controller;
 
+import com.akvone.core.UserNotFoundException;
 import lombok.Data;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -7,7 +8,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
-public class MainAdvice {
+public class MainControllerAdvice {
 
   @ExceptionHandler(UserNotFoundException.class)
   public ResponseEntity<ErrorDTO> handle(UserNotFoundException e){
