@@ -18,6 +18,7 @@ public class Analytic {
   @Data
   public static class AnalyticInfo {
 
+    int counter;
     double min;
     double max;
     double sum;

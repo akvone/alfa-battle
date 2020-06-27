@@ -19,7 +19,7 @@ public class KafkaListeners {
 
   @KafkaListener(
       topics = "RAW_PAYMENTS",
-      groupId = "akvone18",
+      groupId = "akvone22",
       properties = "auto.offset.reset=earliest"
   )
   public void handle(ConsumerRecord<String, String> record) {

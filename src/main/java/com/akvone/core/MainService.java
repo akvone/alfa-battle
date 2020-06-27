@@ -2,7 +2,9 @@ package com.akvone.core;
 
 import com.akvone.core.Analytic.AnalyticInfo;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -23,8 +25,9 @@ public class MainService {
 
     analytic.getAnalyticInfo().compute(categoryId, (id, analyticInfo) -> {
       if (analyticInfo == null) {
-        return new AnalyticInfo(payment.amount, payment.amount, payment.amount);
+        return new AnalyticInfo(1, payment.amount, payment.amount, payment.amount);
       } else {
+        analyticInfo.counter++;
         analyticInfo.sum = roundCorrectly(analyticInfo.sum + payment.amount);
         analyticInfo.min = Math.min(analyticInfo.min, payment.amount);
         analyticInfo.max = Math.max(analyticInfo.max, payment.amount);
@@ -52,5 +55,30 @@ public class MainService {
 
   public Collection<Analytic> getFullAnalytic() {
     return storage.values();
+  }
+
+  public Map<String, Integer> getStats(String userId) {
+    var analytic = getAnalytic(userId);
+    var analyticInfo = analytic.getAnalyticInfo();
+
+    var oftenCategoryId = analyticInfo.entrySet().stream()
+        .max(Comparator.comparingInt(o -> o.getValue().counter))
+        .get().getKey();
+    var rareCategoryId = analyticInfo.entrySet().stream()
+        .min(Comparator.comparingInt(o -> o.getValue().counter))
+        .get().getKey();
+    var maxAmountCategoryId = analyticInfo.entrySet().stream()
+        .max(Comparator.comparingDouble(o -> o.getValue().sum))
+        .get().getKey();
+    var minAmountCategoryId = analyticInfo.entrySet().stream()
+        .min(Comparator.comparingDouble(o -> o.getValue().sum))
+        .get().getKey();
+
+    return Map.of(
+        "oftenCategoryId", oftenCategoryId,
+        "rareCategoryId", rareCategoryId,
+        "maxAmountCategoryId", maxAmountCategoryId,
+        "minAmountCategoryId", minAmountCategoryId
+    );
   }
 }
