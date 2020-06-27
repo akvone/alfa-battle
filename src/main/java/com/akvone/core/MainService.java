@@ -36,7 +36,7 @@ public class MainService {
       }
     });
 
-    log.info("Done");
+    log.debug("Done");
   }
 
   private double roundCorrectly(double a) {
