@@ -1,11 +1,13 @@
 logging:
   level:
     root: INFO
+server:
+  port: 8081
 
-#spring:
-#  kafka:
-#    consumer:
-#      bootstrap-servers: localhost:9092
+spring:
+  kafka:
+    consumer:
+      bootstrap-servers: 130.193.51.40:29092
 #      group-id: group_id
 #      auto-offset-reset: earliest
 #      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
