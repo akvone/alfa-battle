@@ -1,5 +1,6 @@
 package com.akvone.core;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.AllArgsConstructor;
@@ -18,6 +19,7 @@ public class Analytic {
   @Data
   public static class AnalyticInfo {
 
+    @JsonIgnore
     int counter;
     double min;
     double max;

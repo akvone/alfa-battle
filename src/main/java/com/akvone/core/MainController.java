@@ -31,11 +31,11 @@ public class MainController {
     return new ResponseEntity<>(analytic, HttpStatus.OK);
   }
 
-//  @GetMapping("analytic/{userId}/stats")
-//  public ResponseEntity<Map<String, Integer>> getAnalyticStats(@PathVariable String userId) {
-//    Map<String, Integer> response = mainService.getStats(userId);
-//
-//    return new ResponseEntity<>(response, HttpStatus.OK);
-//  }
+  @GetMapping("analytic/{userId}/stats")
+  public ResponseEntity<Map<String, Integer>> getAnalyticStats(@PathVariable String userId) {
+    Map<String, Integer> response = mainService.getStats(userId);
+
+    return new ResponseEntity<>(response, HttpStatus.OK);
+  }
 
 }
