@@ -46,7 +46,7 @@ public class MainService {
   }
 
 
-  private BranchWithDistanceDTO getBranchWithDistanceDTO(Double lat, Double lon) {
+  BranchWithDistanceDTO getBranchWithDistanceDTO(Double lat, Double lon) {
     var list = branchRepository.findAll().stream()
         .map(value -> MathUtils.countDistance(lat, value.getLat(), lon, value.getLon())).collect(
             Collectors.toList());
