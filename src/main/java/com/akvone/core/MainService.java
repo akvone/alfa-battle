@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.math3.stat.descriptive.rank.Median;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Service
 @RequiredArgsConstructor
@@ -24,25 +23,35 @@ public class MainService {
 
   }
 
-  public double predict(int id, int dayOfWeek, int hourOfDay) {
-    getBranchDTO(id); // check;
+  public BranchWithPredictDTO predict(int id, int dayOfWeek, int hourOfDay) {
+    var branchDTO = getBranchDTO(id);
 
     var sqlTemplate =
         "SELECT EXTRACT(EPOCH  from (end_time_of_wait - start_time_of_wait)) as wait_time\n"
-            + "FROM  (SELECT *, date_part('dow', data) + 1 as dow FROM queue_log WHERE branches_id = %d "
+            + "FROM  (SELECT *, date_part('dow', data) as dow FROM queue_log WHERE branches_id = %d "
             + "AND end_time_of_wait  >= '%d:00:00' "
             + "AND end_time_of_wait < '%d:00:00')\n"
             + "    as sub\n"
             + "WHERE dow = %d\n"
             + "ORDER BY wait_time";
-    var sql = String.format(sqlTemplate, id, hourOfDay, hourOfDay + 1, dayOfWeek);
+    var countedDOW = dayOfWeek == 7 ? 0 : dayOfWeek;
+    var sql = String.format(sqlTemplate, id, hourOfDay, hourOfDay + 1, countedDOW);
     double[] waitTimes = jdbcTemplate.queryForList(sql, Integer.class).stream()
         .mapToDouble(value -> value)
         .toArray();
 
-    var result = new Median().evaluate(waitTimes);
+    int predicting = (int) Math.round(new Median().evaluate(waitTimes));
 
-    return result;
+    return new BranchWithPredictDTO(
+        branchDTO.getId(),
+        branchDTO.getTitle(),
+        branchDTO.getLon(),
+        branchDTO.getLat(),
+        branchDTO.getAddress(),
+        dayOfWeek,
+        hourOfDay,
+        predicting
+    );
   }
 
 
@@ -62,7 +71,8 @@ public class MainService {
 
   @Data
   @AllArgsConstructor
-  public static class PartLog{
+  public static class PartLog {
+
     private Integer id;
     private Timestamp startTimeOfWait;
     private Timestamp endTimeOfWait;

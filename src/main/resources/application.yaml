@@ -7,7 +7,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/alfa_battle
+    url: jdbc:postgresql://130.193.51.40:5432/alfa_battle
     username: alfa_battle
     password: qwe123
     hikari:

@@ -37,11 +37,11 @@ public class MainController {
 
 
   @GetMapping("branches/{id}/predict")
-  public ResponseEntity<Double> predict(@PathVariable int id,
+  public ResponseEntity<BranchWithPredictDTO> predict(@PathVariable int id,
       @RequestParam int dayOfWeek, @RequestParam int hourOfDay) {
-    double predict = mainService.predict(id, dayOfWeek, hourOfDay);
+    var result = mainService.predict(id, dayOfWeek, hourOfDay);
 
-    return new ResponseEntity<>(predict, HttpStatus.OK);
+    return new ResponseEntity<>(result, HttpStatus.OK);
   }
 
 
