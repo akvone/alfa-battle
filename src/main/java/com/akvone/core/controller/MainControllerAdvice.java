@@ -1,4 +1,4 @@
-package com.akvone.core;
+package com.akvone.core.controller;
 
 import javax.persistence.EntityNotFoundException;
 import lombok.Data;
@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @ControllerAdvice
-public class MainAdvice {
+public class MainControllerAdvice {
 
   @ExceptionHandler(EntityNotFoundException.class)
   public ResponseEntity<ErrorDTO> handle(EntityNotFoundException e){

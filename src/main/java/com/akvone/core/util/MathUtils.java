@@ -1,4 +1,4 @@
-package com.akvone.core;
+package com.akvone.core.util;
 
 import static java.lang.Math.*;
 

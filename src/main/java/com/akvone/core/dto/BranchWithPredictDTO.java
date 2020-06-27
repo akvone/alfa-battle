@@ -1,16 +1,17 @@
-package com.akvone.core;
+package com.akvone.core.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-@Data
 @AllArgsConstructor
-public class BranchWithDistanceDTO {
+@Data
+public class BranchWithPredictDTO {
   private Integer id;
   private String title;
   private Double lon;
   private Double lat;
   private String address;
-
-  private Integer distance;
+  private Integer dayOfWeek;
+  private Integer hourOfDay;
+  private Integer predicting;
 }

@@ -1,10 +1,11 @@
-package com.akvone.core;
+package com.akvone.core.service;
 
-import java.sql.Timestamp;
+import com.akvone.core.jpa.BranchRepository;
+import com.akvone.core.util.MathUtils;
+import com.akvone.core.dto.BranchDTO;
+import com.akvone.core.dto.BranchWithDistanceDTO;
+import com.akvone.core.dto.BranchWithPredictDTO;
 import java.util.Comparator;
-import java.util.stream.Collectors;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.math3.stat.descriptive.rank.Median;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -17,10 +18,9 @@ public class MainService {
   private final JdbcTemplate jdbcTemplate;
   private final BranchRepository branchRepository;
 
-  BranchDTO getBranchDTO(Integer id) {
+  public BranchDTO getBranchDTO(Integer id) {
     var entity = branchRepository.getOne(id);
     return new BranchDTO(entity.getId(), entity.getTitle(), entity.getLon(), entity.getLat(), entity.getAddress());
-
   }
 
   public BranchWithPredictDTO predict(int id, int dayOfWeek, int hourOfDay) {
@@ -55,26 +55,18 @@ public class MainService {
   }
 
 
-  BranchWithDistanceDTO getBranchWithDistanceDTO(Double lat, Double lon) {
-    var list = branchRepository.findAll().stream()
-        .map(value -> MathUtils.countDistance(lat, value.getLat(), lon, value.getLon())).collect(
-            Collectors.toList());
-
+  public BranchWithDistanceDTO getBranchWithDistanceDTO(Double lat, Double lon) {
     var entity = branchRepository.findAll().stream()
         .min(Comparator.comparingDouble(value -> MathUtils.countDistance(lat, value.getLat(), lon, value.getLon())))
-        .get();
+        .get(); // Can't be empty
     Integer minDistance = MathUtils.countDistance(lat, entity.getLat(), lon, entity.getLon()).intValue();
 
-    return new BranchWithDistanceDTO(entity.getId(), entity.getTitle(), entity.getLon(),
-        entity.getLat(), entity.getAddress(), minDistance);
+    return new BranchWithDistanceDTO(entity.getId(),
+        entity.getTitle(),
+        entity.getLon(),
+        entity.getLat(),
+        entity.getAddress(),
+        minDistance);
   }
 
-  @Data
-  @AllArgsConstructor
-  public static class PartLog {
-
-    private Integer id;
-    private Timestamp startTimeOfWait;
-    private Timestamp endTimeOfWait;
-  }
 }

@@ -1,7 +1,9 @@
-package com.akvone.core;
+package com.akvone.core.controller;
 
-import java.util.Comparator;
-import java.util.stream.Collectors;
+import com.akvone.core.service.MainService;
+import com.akvone.core.dto.BranchDTO;
+import com.akvone.core.dto.BranchWithDistanceDTO;
+import com.akvone.core.dto.BranchWithPredictDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -17,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class MainController {
 
   private final MainService mainService;
-  private final BranchRepository branchRepository;
 
   @GetMapping("branches/{id}")
   public ResponseEntity<BranchDTO> get(@PathVariable Integer id) {
@@ -26,14 +27,12 @@ public class MainController {
     return new ResponseEntity<>(branchDTO, HttpStatus.OK);
   }
 
-
   @GetMapping("branches")
   public ResponseEntity<BranchWithDistanceDTO> get(@RequestParam Double lat, @RequestParam Double lon) {
     BranchWithDistanceDTO branchWithDistanceDTO = mainService.getBranchWithDistanceDTO(lat, lon);
 
     return new ResponseEntity<>(branchWithDistanceDTO, HttpStatus.OK);
   }
-
 
 
   @GetMapping("branches/{id}/predict")
