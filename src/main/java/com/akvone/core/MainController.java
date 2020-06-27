@@ -45,5 +45,10 @@ public class MainController {
     return new ResponseEntity<>(branchWithDistanceDTO,HttpStatus.OK);
   }
 
+  @GetMapping("branches/{id}/predict")
+  public void predict(@PathVariable int id, @RequestParam int dayOfWeek, @RequestParam int hourOfDay){
+    var predict = mainService.predict(id, dayOfWeek, hourOfDay);
+  }
+
 
 }
