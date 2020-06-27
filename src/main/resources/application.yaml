@@ -4,6 +4,11 @@ logging:
 server:
   port: 8081
 
+management:
+  endpoints:
+    web:
+      base-path: "/admin"
+
 spring:
   kafka:
     consumer:
