@@ -17,8 +17,8 @@ public class BranchEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   public Integer id;
   private String title;
-  private String lon;
-  private String lat;
+  private Double lon;
+  private Double lat;
   private String address;
 
 }
