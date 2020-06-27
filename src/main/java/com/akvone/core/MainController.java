@@ -1,7 +1,6 @@
 package com.akvone.core;
 
 import java.util.Comparator;
-import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,32 +21,27 @@ public class MainController {
 
   @GetMapping("branches/{id}")
   public ResponseEntity<BranchDTO> get(@PathVariable Integer id) {
-    var entity = branchRepository.getOne(id);
-    var branchDTO = new BranchDTO(entity.getId(), entity.getTitle(), entity.getLon(), entity.getLat(),
-        entity.getAddress());
+    var branchDTO = mainService.getBranchDTO(id);
 
     return new ResponseEntity<>(branchDTO, HttpStatus.OK);
   }
 
+
   @GetMapping("branches")
   public ResponseEntity<BranchWithDistanceDTO> get(@RequestParam Double lat, @RequestParam Double lon) {
+    BranchWithDistanceDTO branchWithDistanceDTO = mainService.getBranchWithDistanceDTO(lat, lon);
 
-    var list= branchRepository.findAll().stream().map(value -> MathUtils.countDistance(lat, value.getLat(), lon, value.getLon())).collect(
-        Collectors.toList());
-
-    var entity = branchRepository.findAll().stream()
-        .min(Comparator.comparingDouble(value -> MathUtils.countDistance(lat, value.getLat(), lon, value.getLon())))
-        .get();
-    Integer minDistance = MathUtils.countDistance(lat, entity.getLat(), lon, entity.getLon()).intValue();
-
-    var branchWithDistanceDTO = new BranchWithDistanceDTO(entity.getId(), entity.getTitle(), entity.getLon(),
-        entity.getLat(), entity.getAddress(), minDistance);
-    return new ResponseEntity<>(branchWithDistanceDTO,HttpStatus.OK);
+    return new ResponseEntity<>(branchWithDistanceDTO, HttpStatus.OK);
   }
 
+
+
   @GetMapping("branches/{id}/predict")
-  public void predict(@PathVariable int id, @RequestParam int dayOfWeek, @RequestParam int hourOfDay){
-    var predict = mainService.predict(id, dayOfWeek, hourOfDay);
+  public ResponseEntity<Double> predict(@PathVariable int id,
+      @RequestParam int dayOfWeek, @RequestParam int hourOfDay) {
+    double predict = mainService.predict(id, dayOfWeek, hourOfDay);
+
+    return new ResponseEntity<>(predict, HttpStatus.OK);
   }
 
 
